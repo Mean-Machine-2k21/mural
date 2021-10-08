@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/bloc/mural_bloc/mural_bloc.dart';
 import 'package:frontend/repository/mural_repository.dart';
 import 'package:frontend/screens/create_mural_screen.dart';
@@ -23,6 +24,8 @@ import 'flipbook/create_flipbook_frame.dart';
 import 'flipbook/flipbook_create.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   print('aaaaaaassssssssssssssss');
@@ -46,5 +49,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

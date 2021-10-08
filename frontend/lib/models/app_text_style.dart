@@ -6,7 +6,7 @@ class AppTextStyle {
   static String _appFont = 'CircularStd';
   String get appFont => _appFont;
   TextStyle heading = TextStyle(
-    fontFamily: _appFont,
+    fontFamily: 'CircularStd',
     fontSize: 25,
     fontWeight: FontWeight.normal,
     // color: color.contrast,

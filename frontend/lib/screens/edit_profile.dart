@@ -9,6 +9,7 @@ import 'package:frontend/screens/create_bio_screen.dart';
 import 'package:frontend/screens/create_mural_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/profile.dart';
+import 'package:frontend/screens/sawo_login_screen.dart';
 import 'package:frontend/services/logger.dart';
 import 'package:frontend/widget/shimmer_image.dart';
 import 'package:frontend/widget/toggle_button.dart';
@@ -426,7 +427,7 @@ class _EditProfileState extends State<EditProfile> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => LoginScreen(),
+                            builder: (BuildContext context) => SawoLogin(),
                           ),
                           (route) => false,
                         );
