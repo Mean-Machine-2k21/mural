@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/global.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/navigator_screen.dart';
+import 'package:frontend/screens/sawo_login_screen.dart';
 import 'package:frontend/services/logger.dart';
 import 'package:frontend/bloc/mural_bloc/mural_bloc.dart';
 import 'package:frontend/bloc/theme_bloc.dart';
@@ -51,7 +52,7 @@ class MyHomePage extends StatelessWidget {
           return Container();
         }
         if (tokenValue == " ") {
-          return LoginScreen();
+          return SawoLogin();
         } else {
           return BlocProvider(
             create: (context) => MuralBloc(MuralRepository()),
@@ -97,7 +98,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 routes: {
-                  LoginScreen.routeName: (ctx) => LoginScreen(),
+                  LoginScreen.routeName: (ctx) => SawoLogin(),
                 },
               );
             },
@@ -119,7 +120,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 routes: {
-                  LoginScreen.routeName: (ctx) => LoginScreen(),
+                  LoginScreen.routeName: (ctx) => SawoLogin(),
                 },
               );
             },

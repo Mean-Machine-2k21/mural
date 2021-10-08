@@ -18,12 +18,14 @@ import 'auth_screen.dart';
 import 'login_screen.dart';
 //import '../model/app_route.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreenSawo extends StatefulWidget {
+  final String emailAddress;
+  SignUpScreenSawo({required this.emailAddress});
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignUpScreenSawoState createState() => _SignUpScreenSawoState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenSawoState extends State<SignUpScreenSawo> {
   String _email = '';
   bool isloading = false;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -75,10 +77,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     MuralRepository _muralRepository = MuralRepository();
 
-    Future<Map> attemptSignUp(String username, String password) async {
+    Future<Map> attemptSignUp(String username, String email) async {
       var res = await http.post(Uri.parse("$SERVER_IP/api/signup"),
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({"username": username, "password": password}));
+          body: json.encode({"username": username, "email": email}));
       print('gggggggggggghhhhgggggggggggggggggggggghhhhhhhh');
       print(json.decode(res.body));
       if (res.statusCode == 201) return json.decode(res.body);
@@ -171,84 +173,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(
                           height: height * 0.03,
                         ),
-                        TextFormField(
-                          style: TextStyle(color: themeBloc.contrast),
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 20),
-                            labelText: 'Password',
-                            labelStyle: TextStyle(
-                              color: themeBloc.contrast,
-                            ),
-                            prefixIcon: Icon(
-                              Icons.vpn_key_outlined,
-                              color: themeBloc.contrast.withOpacity(0.8),
-                              size: 25,
-                            ),
-                            hintStyle: TextStyle(
-                                color: themeBloc.contrast,
-                                fontSize: 25,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'CircularStd'),
-                            filled: true,
-                            fillColor: themeBloc.plain,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              borderSide:
-                                  BorderSide(color: themeBloc.style, width: 2),
-                            ),
-                          ),
-
-                          controller: _passwordController,
-                          // autofocus: _emailFocus,
-                          // onSubmit: (_) {
-                          //   _passwordFocus.requestFocus();
-                          // },
-                        ),
-                        SizedBox(
-                          height: height * 0.07,
-                        ),
-                        TextFormField(
-                          style: TextStyle(color: themeBloc.contrast),
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 20),
-                            labelText: 'Confirm Password',
-                            labelStyle: TextStyle(
-                              color: themeBloc.contrast,
-                            ),
-                            prefixIcon: Icon(
-                              Icons.vpn_key_outlined,
-                              color: themeBloc.contrast.withOpacity(0.8),
-                              size: 25,
-                            ),
-                            hintStyle: TextStyle(
-                                color: themeBloc.contrast,
-                                fontSize: 25,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'CircularStd'),
-                            filled: true,
-                            fillColor: themeBloc.plain,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              borderSide:
-                                  BorderSide(color: themeBloc.style, width: 2),
-                            ),
-                          ),
-                          controller: _confirmPasswordController,
-                          validator: (value) {
-                            if (value!.isEmpty)
-                              return 'Please retype password';
-                            else if (_passwordController.text !=
-                                _confirmPasswordController.text)
-                              return 'Password didnt match';
-                            return null;
-                          },
-                        ),
                         SizedBox(
                           height: height * 0.07,
                         ),
@@ -261,20 +185,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 print(_passwordController.text);
                                 print(_emailController.text);
                                 var username = _emailController.text;
-                                var password = _passwordController.text;
 
                                 if (username.length < 4)
                                   displayDialog(context, "Invalid Username",
                                       "The username should be at least 4 characters long");
-                                else if (password.length < 7)
-                                  displayDialog(context, "Invalid Password",
-                                      "The password should be at least 7 characters long");
                                 else {
                                   setState(() {
                                     isloading = true;
                                   });
-                                  var jwt =
-                                      await attemptSignUp(username, password);
+                                  var jwt = await attemptSignUp(
+                                      username, widget.emailAddress);
+                                  // TODO
                                   setState(() {
                                     isloading = false;
                                   });
@@ -327,23 +248,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(
                           height: height * 0.17,
                         ),
-                        AppButton(
-                          buttonColor: themeBloc.style,
-                          buttonText: 'Login',
-                          onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => BlocProvider.value(
-                                    value: themeBloc,
-                                    child: SawoLogin(),
-                                  ),
-                                ));
-                          },
-                        ),
-                        SizedBox(
-                          height: height * 0.02,
-                        ),
+                        // AppButton(
+                        //   buttonColor: themeBloc.style,
+                        //   buttonText: 'Login',
+                        //   onTap: () {
+                        //     Navigator.pushReplacement(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (ctx) => BlocProvider.value(
+                        //             value: themeBloc,
+                        //             child: SawoLogin(),
+                        //           ),
+                        //         ));
+                        //   },
+                        // ),
+                        // SizedBox(
+                        //   height: height * 0.02,
+                        // ),
                       ],
                     ),
                   ),

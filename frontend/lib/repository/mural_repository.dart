@@ -6,6 +6,10 @@ import 'package:frontend/services/api_handling.dart';
 class MuralRepository {
   ApiHandling _apiHandling = ApiHandling();
 
+  sawoAttempLogin({required String jsonPayload}) async {
+    return await _apiHandling.attemptLogInSawo(jsonPayload);
+  }
+
   fetchProfileMurals(
       {required List<Mural> murals,
       required String username,

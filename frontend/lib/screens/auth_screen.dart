@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'package:frontend/screens/sawo_login_screen.dart';
+
 import '../bloc/theme_bloc.dart';
 import 'login_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      var themeBloc = BlocProvider.of<ThemeBloc>(context);
+    var themeBloc = BlocProvider.of<ThemeBloc>(context);
 
     return MaterialApp(
       title: 'Authentication',
@@ -34,15 +36,15 @@ class AuthScreen extends StatelessWidget {
 
               if (jwt.length != 3) {
                 return BlocProvider.value(
-                    value: themeBloc,
-                    child:LoginScreen(),
-                  );
+                  value: themeBloc,
+                  child: SawoLogin(),
+                );
               } else {
                 var payload = json.decode(
                     ascii.decode(base64.decode(base64.normalize(jwt[1]))));
                 if (DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000)
                     .isAfter(DateTime.now())) {
-                 // return HomePage(str, payload);
+                  // return HomePage(str, payload);
                   return BlocProvider.value(
                     value: themeBloc,
                     child: HomePage(str, payload),
@@ -50,15 +52,15 @@ class AuthScreen extends StatelessWidget {
                 } else {
                   return BlocProvider.value(
                     value: themeBloc,
-                    child: LoginScreen(),
+                    child: SawoLogin(),
                   );
                 }
               }
             } else {
               return BlocProvider.value(
-                    value: themeBloc,
-                    child: LoginScreen(),
-                  );
+                value: themeBloc,
+                child: SawoLogin(),
+              );
             }
           }),
     );
@@ -81,8 +83,8 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(title: Text("Secret Data Screen")),
         body: Center(
           child: FutureBuilder(
-              future:
-                  http.read(Uri.parse('$SERVER_IP/data'), headers: {"Authorization": jwt}),
+              future: http.read(Uri.parse('$SERVER_IP/data'),
+                  headers: {"Authorization": jwt}),
               builder: (context, snapshot) => snapshot.hasData
                   ? Column(
                       children: <Widget>[

@@ -9,6 +9,7 @@ import 'package:frontend/models/search_result.dart';
 import 'package:frontend/models/user_list.dart';
 import 'package:frontend/models/user_model.dart';
 import 'logger.dart';
+import 'package:http/http.dart' as http;
 
 class ApiHandling {
   static const String url = SERVER_IP;
@@ -19,6 +20,19 @@ class ApiHandling {
       contentType: "application/json",
       // queryParameters: ,
     );
+  }
+
+  Future<Map> attemptLogInSawo(String jsonPayload) async {
+    var res = await http.post(Uri.parse("$SERVER_IP/api/email/exists"),
+        headers: {'Content-Type': 'application/json'}, body: jsonPayload);
+    print('gggggggggggghhhhgggggggggggggggggggggghhhhhhhh');
+    logger.i(json.decode(res.body));
+    //todo
+    if (res.statusCode == 200) return json.decode(res.body);
+
+    print('res+' + res.statusCode.toString());
+
+    return {};
   }
 
   Future<void> editProfile({
