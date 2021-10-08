@@ -1,3 +1,5 @@
+
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -22,7 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
         minlength: 7,
         validate(value) {
@@ -30,6 +32,12 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Password Must not include the word "password"');
             }
         }
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true,
     },
     tokens: [{
         token: {

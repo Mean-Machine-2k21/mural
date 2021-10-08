@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = new express.Router();
 const User = require('../Models/User');
@@ -6,21 +7,61 @@ const auth = require('../Middleware/Auth');
 const mongoose = require('mongoose');
 const ObjectId = require("mongodb").ObjectId;
 
-router.post('/api/signup', async (req, res, next) => {
+
+router.post('/api/email/exists', async (req, res, next) => {
     try {
-        const user = new User(
-            {
-                ...req.body,
-                avatar_url: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
-                bio_url: 'https://empire-s3-production.bobvila.com/articles/wp-content/uploads/2020/04/Types-of-Wall-Texture-sand-swirl.jpg'
-            });
-        await user.save();
-        const token = await user.generateAuthToken();
-        res.status(201).send({ user, token });
+        if (req.body.identifier_type === 'email' && req.body.identifier !== null) {
+            const user = await User.findOne({ email: req.body.identifier });
+            if (user !== null) {
+                const token = await user.generateAuthToken();
+                return res.status(200).send({ newUser: false, user, token });
+            }
+            else {
+                return res.status(200).send({ newUser: true, email: req.body.identifier });
+            }
+        }
+        return res.status(400).json({ msg: 'Something Went Wrong' });
     } catch (error) {
         next(error);
     }
 });
+
+router.post('/api/signup/', async (req, res) => {
+    try {
+        const { email, username } = req.body;
+        const user = await User.findOne({ $or: [{ username }, { email }] });
+        if (user !== null)
+            return res.status(200).json({ isAvailable: false });
+
+        const newUser = new User(
+            {
+                email, username,
+                avatar_url: process.env.DEFAULT_AVATAR_URL,
+                bio_url: process.env.DEFAULT_BIO_URL
+            });
+        await newUser.save();
+        const token = await newUser.generateAuthToken();
+        return res.status(201).send({ isAvailable: true, signedUp: true, user: newUser, token });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ msg: 'Something went wrong' });
+    }
+});
+// router.post('/api/signup', async (req, res, next) => {
+//     try {
+//         const user = new User(
+//             {
+//                 ...req.body,
+//                 avatar_url: process.env.DEFAULT_AVATAR_URL,
+//                 bio_url: process.env.DEFAULT_BIO_URL
+//             });
+//         await user.save();
+//         const token = await user.generateAuthToken();
+//         res.status(201).send({ user, token });
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 
 router.post('/api/login', async (req, res) => {
